@@ -1,5 +1,5 @@
-{% extends 'places/base.html' %} {% block title %}{{ place.name }} - Details{%
-endblock %} {% block content %}
+{% extends 'places/base.html' %} {% load custom_filters %} {% block title %}{{
+place.name }} - Details{% endblock %} {% block content %}
 <div class="bg-white rounded-lg shadow-lg overflow-hidden">
   {% if place.image %}
   <img
