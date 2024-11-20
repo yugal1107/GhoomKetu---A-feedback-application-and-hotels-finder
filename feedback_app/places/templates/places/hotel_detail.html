@@ -1,0 +1,65 @@
+{% extends 'places/base.html' %}
+{% load custom_filters %}
+{% block title %}{{ hotel.name }} - Details{% endblock %}
+{% block content %}
+<div class="max-w-5xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden">
+  {% if hotel.image %}
+  <img
+    src="{{ hotel.image.url }}"
+    alt="{{ hotel.name }}"
+    class="w-full h-64 object-cover"
+  />
+  {% endif %}
+  <div class="p-6">
+    <h1 class="text-3xl font-bold mb-4">{{ hotel.name }}</h1>
+    <div class="mb-4">
+      <p class="text-gray-600">{{ hotel.city }}, {{ hotel.state }}</p>
+      <p class="text-2xl font-bold text-blue-600">₹{{ hotel.price }}</p>
+      <div class="flex items-center mt-2">
+        <span class="text-yellow-400 text-xl">★</span>
+        <span class="ml-1 text-lg">{{ hotel.average_rating }}</span>
+      </div>
+    </div>
+    <p class="text-gray-700 mb-6">{{ hotel.description }}</p>
+    <div class="border-t pt-6">
+      <h2 class="text-2xl font-bold mb-4">Reviews</h2>
+      <form method="POST" class="mb-6 bg-gray-50 p-4 rounded">
+        {% csrf_token %} {{ form.as_p }}
+        <button
+          type="submit"
+          class="mt-4 bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700"
+        >
+          Submit Review
+        </button>
+      </form>
+      <div class="space-y-4">
+        {% for review in reviews %}
+        <div class="border-b pb-4">
+          <div class="flex items-center mb-2">
+            <span class="font-bold">{{ review.user }}</span>
+            <div class="ml-4 text-yellow-400">
+              {% for _ in "★"|multiply:review.rating %}★{% endfor %}
+            </div>
+          </div>
+          <p class="text-gray-700">{{ review.text }}</p>
+          <p class="text-gray-500 text-sm mt-1">
+            {{ review.created_at|date:"F j, Y" }}
+          </p>
+        </div>
+        {% empty %}
+        <p class="text-gray-600">No reviews yet. Be the first to review!</p>
+        {% endfor %}
+      </div>
+    </div>
+    {% if hotel.booking_url %}
+    <div class="p-6 bg-gray-50 border-t">
+        <a href="{{ hotel.booking_url }}" 
+           class="block w-full md:w-auto text-center bg-gradient-to-r from-green-600 to-green-500 text-white px-8 py-4 rounded-xl font-semibold hover:shadow-lg transform transition-all duration-300 hover:-translate-y-1"
+           target="_blank">
+            Book Now
+        </a>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

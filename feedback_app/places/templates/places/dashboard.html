@@ -1,82 +1,124 @@
-{% extends 'places/base.html' %} {% block title %}Dashboard - India Travel
-Feedback{% endblock %} {% block content %}
-<div class="mb-8">
-  <h1 class="text-3xl font-bold mb-6">Discover Places in India</h1>
-
-  <form method="GET" class="bg-white p-4 rounded-lg shadow mb-6">
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-      <div>
-        <input
-          type="text"
-          name="search"
-          placeholder="Search places..."
-          class="w-full p-2 border rounded"
-        />
-      </div>
-      <div>
-        <select name="state" class="w-full p-2 border rounded">
-          <option value="">Select State</option>
-          {% for state in states %}
-          <option value="{{ state }}">{{ state }}</option>
-          {% endfor %}
-        </select>
-      </div>
-      <div>
-        <select name="city" class="w-full p-2 border rounded">
-          <option value="">Select City</option>
-          {% for city in cities %}
-          <option value="{{ city }}">{{ city }}</option>
-          {% endfor %}
-        </select>
-      </div>
-      <div>
-        <input
-          type="number"
-          name="min_rating"
-          min="1"
-          max="5"
-          placeholder="Minimum Rating"
-          class="w-full p-2 border rounded"
-        />
-      </div>
+{% extends 'places/base.html' %}
+{% block title %}Dashboard - India Travel Feedback{% endblock %}
+{% block content %}
+<div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50">
+  <!-- Hero Section -->
+  <div class="relative py-16 mb-12 bg-gradient-to-r from-blue-600 to-indigo-600">
+    <div class="container mx-auto px-4">
+      <h1 class="text-5xl font-extrabold text-white text-center mb-4 animate-fade-in-down">
+        Discover Places and Hotels in India
+      </h1>
+      <p class="text-xl text-blue-100 text-center max-w-2xl mx-auto">
+        Explore the finest destinations and accommodations across India
+      </p>
     </div>
-    <button
-      type="submit"
-      class="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-    >
-      Filter
-    </button>
-  </form>
+  </div>
 
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-    {% for place in places %}
-    <div class="bg-white rounded-lg shadow overflow-hidden">
-      {% if place.image %}
-      <img
-        src="{{ place.image.url }}"
-        alt="{{ place.name }}"
-        class="w-full h-48 object-cover"
-      />
-      {% endif %}
-      <div class="p-4">
-        <h2 class="text-xl font-bold mb-2">{{ place.name }}</h2>
-        <p class="text-gray-600 mb-2">{{ place.city }}, {{ place.state }}</p>
-        <p class="text-gray-800 mb-2">₹{{ place.price }}</p>
-        <div class="flex items-center mb-4">
-          <span class="text-yellow-400">★</span>
-          <span class="ml-1">{{ place.average_rating }}</span>
+  <!-- View Toggle -->
+  <div class="container mx-auto px-4">
+    <div class="flex justify-center mb-12 space-x-4">
+      <a href="?view=places"
+        class="px-8 py-4 rounded-full text-lg font-semibold {% if view_type == 'places' %}bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg{% else %}bg-white text-gray-700{% endif %} transition-all duration-300 hover:shadow-xl transform hover:-translate-y-1">
+        🏛 Places
+      </a>
+      <a href="?view=hotels"
+        class="px-8 py-4 rounded-full text-lg font-semibold {% if view_type == 'hotels' %}bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg{% else %}bg-white text-gray-700{% endif %} transition-all duration-300 hover:shadow-xl transform hover:-translate-y-1">
+        🏨 Hotels
+      </a>
+    </div>
+
+    <!-- Filter Form -->
+    <form method="GET" class="bg-white p-8 rounded-2xl shadow-xl mb-12 max-w-6xl mx-auto">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div class="space-y-2">
+          <label class="text-sm font-medium text-gray-700">Search</label>
+          <input type="text" name="search" placeholder="Search places or hotels..."
+            class="w-full p-4 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300" />
         </div>
-        <a
-          href="{% url 'place_detail' place.pk %}"
-          class="block text-center bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-        >
-          View Details
-        </a>
+        <div>
+          <label class="text-sm font-medium text-gray-700">State</label>
+          <select name="state" class="w-full p-4 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300">
+            <option value="">Select State</option>
+            {% for state in states %}
+            <option value="{{ state }}">{{ state }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div>
+          <label class="text-sm font-medium text-gray-700">City</label>
+          <select name="city" class="w-full p-4 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300">
+            <option value="">Select City</option>
+            {% for city in cities %}
+            <option value="{{ city }}">{{ city }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div>
+          <label class="text-sm font-medium text-gray-700">Minimum Rating</label>
+          <input type="number" name="min_rating" min="1" max="5" placeholder="Minimum Rating"
+            class="w-full p-4 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300" />
+        </div>
       </div>
+      <button type="submit"
+        class="mt-8 w-full md:w-auto px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl font-semibold hover:shadow-lg transform transition-all duration-300 hover:-translate-y-1">
+        Apply Filters
+      </button>
+    </form>
+
+    <!-- Items Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+      {% for item in items %}
+      <div class="bg-white rounded-2xl shadow-xl overflow-hidden transform transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl">
+        {% if item.image %}
+        <div class="relative h-64">
+          <img src="{{ item.image.url }}" alt="{{ item.name }}"
+            class="w-full h-full object-cover transition-transform duration-300 hover:scale-105" />
+          <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-4">
+            <h2 class="text-2xl font-bold text-white">{{ item.name }}</h2>
+          </div>
+        </div>
+        {% endif %}
+        <div class="p-6 space-y-4">
+          <div class="flex items-center justify-between">
+            <p class="text-gray-600">{{ item.city }}, {{ item.state }}</p>
+            <p class="text-xl font-bold text-blue-600">₹{{ item.price }}</p>
+          </div>
+          <div class="flex items-center space-x-2">
+            <div class="flex items-center">
+              {% for i in "12345" %}
+              <span class="text-yellow-400 {% if forloop.counter <= item.average_rating|floatformat:"0" %}fill-current{% else %}text-gray-300{% endif %}">★</span>
+              {% endfor %}
+            </div>
+            <span class="text-gray-600">({{ item.average_rating }})</span>
+          </div>
+          <a href="{% if view_type == 'places' %}{% url 'place_detail' item.pk %}{% else %}{% url 'hotel_detail' item.pk %}{% endif %}"
+            class="block text-center bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-6 py-3 rounded-xl hover:shadow-lg transform transition-all duration-300 hover:-translate-y-1">
+            View Details
+          </a>
+        </div>
+      </div>
+      {% empty %}
+      <div class="col-span-full text-center py-12">
+        <p class="text-xl text-gray-600">No items found matching your criteria.</p>
+      </div>
+      {% endfor %}
     </div>
-    {% empty %}
-    <p class="text-gray-600">No places found matching your criteria.</p>
-    {% endfor %}
   </div>
 </div>
+
+<style>
+  @keyframes fade-in-down {
+    0% {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  .animate-fade-in-down {
+    animation: fade-in-down 0.5s ease-out;
+  }
+</style>
 {% endblock %}
